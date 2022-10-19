@@ -30,6 +30,27 @@ const getAllToxicPersons = async (
   );
 };
 
+const getToxicPerson = async (
+  req: express.Request,
+  res: express.Response,
+  next: express.NextFunction,
+) => {
+  const { email } = req.body;
+  const lowercaseEmail = email.toLowerCase();
+  const existingUser: IToxicPerson | null = await getToxicPersonByEmail(
+    lowercaseEmail,
+  );
+  if (!existingUser) {
+    next(
+      ApiError.badRequest(
+        `An account with email ${lowercaseEmail} does not exist.`,
+      ),
+    );
+  } else {
+    res.status(StatusCode.OK).send(existingUser);
+  }
+};
+
 const create = async (
   req: express.Request,
   res: express.Response,
@@ -118,4 +139,4 @@ const addTraits = async (
     });
 };
 
-export { getAllToxicPersons, create, addTraits };
+export { getAllToxicPersons, getToxicPerson, create, addTraits };
