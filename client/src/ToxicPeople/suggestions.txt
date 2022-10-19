@@ -1,0 +1,6 @@
+For the frontend, we'd like to see you would implement both the group and individual pages! 
+Take a look at the AdminDashboard folder and poke around to see how the AdminDashboardPage is defined, and how it uses UserTable.
+This can be a good starting point for inspiration on how to divide up your files and what to put in each file,
+as well as how to use MUI to render components and pages. 
+
+We suggest to use MUI cards and grids to help with spacing of the components. You can also find ways to use MUI styling online!
