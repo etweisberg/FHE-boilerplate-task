@@ -23,7 +23,6 @@ const getAllToxicPersonsFromDB = async () => {
 const createToxicPerson = async (
   firstName: string,
   lastName: string,
-  email: string,
   password: string,
   pictureUrl: string,
   toxicTraits: [string],
@@ -35,7 +34,6 @@ const createToxicPerson = async (
   const newToxicPerson = new ToxicPerson({
     firstName,
     lastName,
-    email,
     password: hashedPassword,
     pictureUrl,
     toxicTraits,
@@ -44,16 +42,15 @@ const createToxicPerson = async (
   return toxicPerson;
 };
 
-const addToxicTraits = async (email: string, traits: [string]) => {
-  const toxic = await ToxicPerson.updateOne(
-    { email },
-    { $push: { toxicTraits: { $each: traits } } },
-  ).exec();
+const addToxicTraits = async (id: string, traits: [string]) => {
+  const toxic = await ToxicPerson.findByIdAndUpdate(id, {
+    $push: { toxicTraits: { $each: traits } },
+  }).exec();
   return toxic;
 };
 
-const getToxicPersonByEmail = async (email: string) => {
-  const toxicPerson = await ToxicPerson.findOne({ email })
+const getToxicPersonByID = async (id: string) => {
+  const toxicPerson = await ToxicPerson.findById(id)
     .select(removeSensitiveDataQuery)
     .exec();
   return toxicPerson;
@@ -64,5 +61,5 @@ export {
   getAllToxicPersonsFromDB,
   createToxicPerson,
   addToxicTraits,
-  getToxicPersonByEmail,
+  getToxicPersonByID,
 };

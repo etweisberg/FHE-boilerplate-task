@@ -8,7 +8,7 @@ import StatusCode from '../util/statusCode';
 import { IToxicPerson } from '../models/toxicperson.model';
 import {
   createToxicPerson,
-  getToxicPersonByEmail,
+  getToxicPersonByID,
   addToxicTraits,
   getAllToxicPersonsFromDB,
 } from '../services/toxicperson.service';
@@ -35,17 +35,10 @@ const getToxicPerson = async (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  const { email } = req.body;
-  const lowercaseEmail = email.toLowerCase();
-  const existingUser: IToxicPerson | null = await getToxicPersonByEmail(
-    lowercaseEmail,
-  );
+  const { id } = req.body;
+  const existingUser: IToxicPerson | null = await getToxicPersonByID(id);
   if (!existingUser) {
-    next(
-      ApiError.badRequest(
-        `An account with email ${lowercaseEmail} does not exist.`,
-      ),
-    );
+    next(ApiError.badRequest(`An account with id ${id} does not exist.`));
   } else {
     res.status(StatusCode.OK).send(existingUser);
   }
@@ -56,52 +49,33 @@ const create = async (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  const { firstName, lastName, email, password, pictureUrl, toxicTraits } =
+  const { id, firstName, lastName, password, pictureUrl, toxicTraits } =
     req.body;
-  if (
-    !firstName ||
-    !lastName ||
-    !email ||
-    !password ||
-    !pictureUrl ||
-    !toxicTraits
-  ) {
-    next(
-      ApiError.missingFields(['firstName', 'lastName', 'email', 'password']),
-    );
+  if (!firstName || !lastName || !password || !pictureUrl || !toxicTraits) {
+    next(ApiError.missingFields(['firstName', 'lastName', 'password']));
     return;
   }
-  const emailRegex =
-    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/g;
+
   const passwordRegex = /^[a-zA-Z0-9!?$%^*)(+=._-]{6,61}$/;
   const nameRegex = /^[a-z ,.'-]+/i;
 
   if (
-    !email.match(emailRegex) ||
     !password.match(passwordRegex) ||
     !firstName.match(nameRegex) ||
     !lastName.match(nameRegex)
   ) {
-    next(ApiError.badRequest('Invalid email, password, or name.'));
+    next(ApiError.badRequest('Invalid password, or name.'));
     return;
   }
-  const lowercaseEmail = email.toLowerCase();
-  const existingUser: IToxicPerson | null = await getToxicPersonByEmail(
-    lowercaseEmail,
-  );
+  const existingUser: IToxicPerson | null = await getToxicPersonByID(id);
   if (existingUser) {
-    next(
-      ApiError.badRequest(
-        `An account with email ${lowercaseEmail} already exists.`,
-      ),
-    );
+    next(ApiError.badRequest(`An account with id ${id} already exists.`));
     return;
   }
   try {
     const toxicPerson = await createToxicPerson(
       firstName,
       lastName,
-      lowercaseEmail,
       password,
       pictureUrl,
       toxicTraits,
@@ -118,18 +92,18 @@ const addTraits = async (
   res: express.Response,
   next: express.NextFunction,
 ) => {
-  const { email, traits } = req.body;
+  const { id, traits } = req.body;
   if (!traits) {
     next(ApiError.missingFields(['traits']));
     return;
   }
 
-  const toxicPerson: IToxicPerson | null = await getToxicPersonByEmail(email);
+  const toxicPerson: IToxicPerson | null = await getToxicPersonByID(id);
   if (!toxicPerson) {
-    next(ApiError.notFound(`Toxic person with email ${email} does not exist`));
+    next(ApiError.notFound(`Toxic person with id ${id} does not exist`));
     return;
   }
-  addToxicTraits(email, traits)
+  addToxicTraits(id, traits)
     .then(() => {
       res.sendStatus(StatusCode.OK);
     })

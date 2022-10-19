@@ -16,7 +16,7 @@ const router = express.Router();
 
 router.get('/all', getAllToxicPersons);
 
-router.get('/toxic-person', getToxicPerson);
+router.post('/toxic-person', getToxicPerson);
 
 router.put('/add-traits', addTraits);
 
