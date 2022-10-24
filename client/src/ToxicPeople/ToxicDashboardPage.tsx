@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
+import { Typography } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import ToxicPerson from './ToxicPerson';
 import { getToxicPeople } from './api';
@@ -20,23 +21,38 @@ function ToxicPersonDashboard() {
       setToxicPeople(data);
     }
 
-    if (!toxicPeople) {
-      getPeople();
-    }
+    getPeople();
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
-    <Grid container>
-      {toxicPeople.map((p: ToxicPersonProps) => (
-        <Grid item>
-          <ToxicPerson
-            firstName={p.firstName}
-            lastName={p.lastName}
-            pictureUrl={p.pictureUrl}
-          />
-        </Grid>
-      ))}
+    <Grid
+      container
+      spacing={0}
+      direction="column"
+      alignItems="center"
+      justifyContent="center"
+      style={{ minHeight: '100vh' }}
+    >
+      <Typography variant="h3">☣️ Biohazards Near You ☣️</Typography>
+      <Grid
+        container
+        spacing={0}
+        direction="row"
+        justifyContent="center"
+        padding="3vh"
+      >
+        {toxicPeople.map((p: ToxicPersonProps) => (
+          <Grid item padding="2vh" direction="row">
+            <ToxicPerson
+              firstName={p.firstName}
+              lastName={p.lastName}
+              pictureUrl={p.pictureUrl}
+            />
+          </Grid>
+        ))}
+      </Grid>
     </Grid>
   );
 }
