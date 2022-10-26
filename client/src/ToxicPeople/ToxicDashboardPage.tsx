@@ -9,6 +9,7 @@ interface ToxicPersonProps {
   firstName: string;
   lastName: string;
   pictureUrl: string;
+  _id: string;
 }
 
 function ToxicPersonDashboard() {
@@ -25,6 +26,13 @@ function ToxicPersonDashboard() {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const l = () => {
+    // eslint-disable-next-line no-underscore-dangle
+    toxicPeople.map((p: ToxicPersonProps) => console.log(p._id));
+  };
+
+  l();
 
   return (
     <Grid
@@ -49,6 +57,8 @@ function ToxicPersonDashboard() {
               firstName={p.firstName}
               lastName={p.lastName}
               pictureUrl={p.pictureUrl}
+              // eslint-disable-next-line no-underscore-dangle
+              id={p._id}
             />
           </Grid>
         ))}

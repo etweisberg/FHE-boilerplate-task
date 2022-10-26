@@ -21,6 +21,7 @@ import LoginPage from './Authentication/LoginPage';
 import EmailResetPasswordPage from './Authentication/EmailResetPasswordPage';
 import ResetPasswordPage from './Authentication/ResetPasswordPage';
 import ToxicPersonDashboard from './ToxicPeople/ToxicDashboardPage';
+import ToxicPersonPage from './ToxicPeople/ToxicPersonPage';
 
 function App() {
   return (
@@ -36,6 +37,10 @@ function App() {
                     <Route
                       path="/toxicpeople"
                       element={<ToxicPersonDashboard />}
+                    />
+                    <Route
+                      path="/toxicpeople/:id"
+                      element={<ToxicPersonPage />}
                     />
                     <Route path="/login" element={<LoginPage />} />
                     <Route path="/register" element={<RegisterPage />} />
