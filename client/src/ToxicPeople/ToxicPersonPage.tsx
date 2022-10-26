@@ -1,4 +1,5 @@
 import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Typography } from '@mui/material';
@@ -42,7 +43,11 @@ function ToxicPersonPage() {
       </div>
     );
   }
-  return <h1>Not found</h1>;
+  return (
+    <div style={{ width: '0', margin: 'auto' }}>
+      <CircularProgress size={80} />
+    </div>
+  );
 }
 
 export default ToxicPersonPage;
