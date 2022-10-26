@@ -5,7 +5,7 @@ async function getToxicPeople() {
   return res;
 }
 
-async function getToxicByID(id: string) {
+async function getToxicByID(id: string | undefined) {
   const res = await postData('toxic/toxic-person', { id });
   return res;
 }

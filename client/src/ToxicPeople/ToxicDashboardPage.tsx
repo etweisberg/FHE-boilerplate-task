@@ -27,13 +27,6 @@ function ToxicPersonDashboard() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const l = () => {
-    // eslint-disable-next-line no-underscore-dangle
-    toxicPeople.map((p: ToxicPersonProps) => console.log(p._id));
-  };
-
-  l();
-
   return (
     <Grid
       container
